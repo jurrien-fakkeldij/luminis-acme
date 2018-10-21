@@ -60,5 +60,15 @@ nbactions.xml
 .idea
 *.iml
 
+# Visual Code files #
+.project
+.factorypath
+.classpath
+.vscode
+.settings
+
 # General files #
 *.bak
+
+# Project Output #
+report.csv

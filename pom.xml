@@ -30,6 +30,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Spring Object/XML Mapping support -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+        </dependency>
+
         <!-- is needed to run, no intention of running or using a database currently. -->
         <dependency>
             <groupId>org.hsqldb</groupId>
