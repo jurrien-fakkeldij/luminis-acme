@@ -1,0 +1,6 @@
+com/acme/configuration/ApplicationConfiguration.class
+com/acme/batch/JobCompletionNotificationListener.class
+com/acme/Application.class
+com/acme/configuration/ApplicationConfiguration$1.class
+com/acme/model/Statement.class
+com/acme/processor/StatementProcessor.class
