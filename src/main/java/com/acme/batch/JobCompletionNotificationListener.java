@@ -1,20 +1,17 @@
 package com.acme.batch;
 
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-
-import javax.annotation.Resource;
-
 import com.acme.model.ProcessingState;
 import com.acme.model.Statement;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Component in the application to listen to when the job has finished so we can generate an output on the gathered data.
@@ -32,6 +29,13 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
     private static String DELIMITER = ",";
     private static String END_LINE = "\n";
 
+    /**
+     * Constructor to create the JobCompletionNotificationListener and setup the
+     * FileWriter for the report.
+     *
+     * @throws IOException when there is an exception creating the FileWriter or writing
+     *                     to the FileWriter.
+     */
     public JobCompletionNotificationListener() throws IOException {
         outputWriter = new FileWriter("report.csv");
         for(String header : CSV_HEADER) {
@@ -49,7 +53,7 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
                     try {
                         outputWriter.write(statement.getReference().toString());
                         outputWriter.write(DELIMITER);
-                        outputWriter.write(statement.getDescription().toString());
+                        outputWriter.write(statement.getDescription());
                         outputWriter.write(END_LINE);
                     } catch (IOException e) {
                         log.info("Writing writer exception: ", e);
