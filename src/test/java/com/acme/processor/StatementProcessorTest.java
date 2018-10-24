@@ -63,6 +63,21 @@ public class StatementProcessorTest {
     }
 
     @Test
+    public void processBadBalanceNegativeMutationStatement() {
+        Statement statement = new Statement();
+        statement.setReference(1000);
+        statement.setDescription("test");
+        statement.setStartBalance(new BigDecimal(10));
+        statement.setMutation(new BigDecimal(-10));
+        statement.setEndBalance(new BigDecimal(20));
+        Statement processedStatement = statementProcessor.process(statement);
+
+        assertFalse(processedStatements.isEmpty());
+        assertTrue(processedStatements.size() == 1);
+        assertTrue(processedStatement.getState() == ProcessingState.FAULT_WRONG_END_BALANCE);
+    }
+
+    @Test
     public void processFaultyDuplicateReferenceStatement() {
         Statement statement = new Statement();
         statement.setReference(1000);
