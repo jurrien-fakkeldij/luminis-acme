@@ -21,8 +21,12 @@ public enum ProcessingState {
 
     private final String name;       
 
-    private ProcessingState(String s) {
-        name = s;
+    /**
+     * Constructor to add name for string representation.
+     * @param name the string representation for the enum.
+     */
+    private ProcessingState(String name) {
+        this.name = name;
     }
 
     /**
