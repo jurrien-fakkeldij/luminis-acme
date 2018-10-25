@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Component in the application to listen to when the job has finished so we can generate an output on the gathered data.
+ * Component in the application to listen to when the job has finished so we can
+ * generate an output on the gathered data.
  */
 @Slf4j
 @Component
@@ -25,7 +26,7 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 
     FileWriter outputWriter;
 
-    private static String[] CSV_HEADER = { "Reference", "Description" };
+    private static String[] CSV_HEADER = { "Reference", "Description", "State" };
     private static String DELIMITER = ",";
     private static String END_LINE = "\n";
 
@@ -33,14 +34,16 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
      * Constructor to create the JobCompletionNotificationListener and setup the
      * FileWriter for the report.
      *
-     * @throws IOException when there is an exception creating the FileWriter or writing
-     *                     to the FileWriter.
+     * @throws IOException when there is an exception creating the FileWriter or
+     *                     writing to the FileWriter.
      */
     public JobCompletionNotificationListener() throws IOException {
         outputWriter = new FileWriter("report.csv");
-        for(String header : CSV_HEADER) {
+        for (String header : CSV_HEADER) {
             outputWriter.write(header);
-            outputWriter.write(DELIMITER);
+            if (header.compareToIgnoreCase(CSV_HEADER[CSV_HEADER.length - 1]) != 0) {
+                outputWriter.write(DELIMITER);
+            }
         }
         outputWriter.write(END_LINE);
     }
@@ -48,12 +51,14 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
     @Override
     public void afterJob(final JobExecution jobExecution) {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-            for(Statement statement : processedStatements) {
-                if(statement.getState() != ProcessingState.CORRECT) {
+            for (Statement statement : processedStatements) {
+                if (statement.getState() != ProcessingState.CORRECT) {
                     try {
                         outputWriter.write(statement.getReference().toString());
                         outputWriter.write(DELIMITER);
                         outputWriter.write(statement.getDescription());
+                        outputWriter.write(DELIMITER);
+                        outputWriter.write(statement.getState().toString());
                         outputWriter.write(END_LINE);
                     } catch (IOException e) {
                         log.info("Writing writer exception: ", e);
